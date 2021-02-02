@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="utf-8"/>
+        <title>Raspberry Pi 4</title>
+        <meta name="description" content="Raspberry Pi 4 conexion"/>
+        <meta name="author" content="Joshua"/>
+        <meta name="keywords" content="Raspberry, IoT,programacionRpi"/>
+        <%- include('partials/head.html')%>
+        
+    </head>
+    <body>
+        <header>
+            <h2>Raspberry Pi 4</h2>
+        </header>
+        <%- include('partials/navigation.html') %>
+        <section class="seccion">
+            <article >
+                <hgroup>
+                    <h2>Raspebrry Pi:</h2>
+                    <h1>¿Como iniciar en Raspberry Pi 4?</h1>
+                </hgroup>
+                <time datetime="05-12-2020"></time>
+                <p>Para comenzar a trabajar con una Raspberry Pi (en particular con la Pi 4), primeramente debemos configurarla, desde cargar con raspbian (SO basado en debian para la raspberry pi) la Raspberry, hasta poder acceder a ella de manera remota y que sea precindible el uso de perifericos definidos para esta y poder manejar nuestra raspberry desde un computador externo (el personal o de trabajo).<br>
+                ¿Pero como hacemos eso? Es bastante simple y cortesia de un canal en youtube te lo agregare a un link  a continuacion :D
+                </p>
+                <a href="https://www.youtube.com/watch?v=BpJCAafw2qE">Iniciemos con la raspberry</a>
+                <p>
+                    <br>Ya con nuestra raspberry configurada y lista para usar ¿que sigue?<br>
+                    saber como conectar nustros gpio (General Purpose Input/Output, Entrada/Salida de Propósito General)
+                    para eso les comentare que existen tres maneras de contar nuestros pines del J8
+                </p>
+                <ul>
+                    <li>BCM:Es un protocolo muy usado para referirse a los gpio segun su conexion con el SoC</li>
+                    <li>Board:Es la enumeracion de los pines segun como estan en la tarjeta de la raspberry </li>
+                    <a href="https://www.hwlibre.com/gpio-raspberry-pi/#Funciones_de_los_GPIO"><img src="img/BCM.png"></a>
+                    <li>wPi:Es un protocolo que se utiliza la distribucion de gpio utilizada por PiJ4</li>
+                    <a href="https://pi4j.com/1.2/pins/model-3b-rev1.html"><img src="img/PiJ4.png"></a>
+                </ul>
+                <p>
+                    si quieres ver la documentacion oficial por parte de raspberry da <a href="https://www.raspberrypi.org/documentation/hardware/raspberrypi/spi/README.md">click aqui</a>
+                </p>
+                <footer>
+                    <br>
+                    Esta pagina te indica como los inicios en un Raspberry Pi4, tambien es valido para Raspberry Pi 3 B
+                </footer>
+                <address>
+                    <a href="https://www.raspberrypi.org">Productos de Raspberry</a>
+                </address>
+            </article>
+        </section>
+        <aside class="lateral">
+            <ul>
+                <li>Repositorios git originales</li>
+                <ol>
+                    <li>
+                        <a href="https://github.com/johnblackmore/py-tm1638">TM1638-1</a>
+                    </li>
+                    <li>
+                        <a href="https://github.com/thilaire/rpi-TM1638">TM1638-2</a>
+                    </li>
+                    <li>
+                        <a href="https://github.com/the-raspberry-pi-guy/lcd">LCD2x16 con I2C</a>
+                    </li>
+                </ol>
+                <li><a href="https://github.com/JoshuaHernandezAl/RaspberryPi4Programs">Repositorio personal en Git</a></li>
+            </ul>
+
+        </aside>
+        <%- include('partials/footer.html') %>
+    </body>
+</html>

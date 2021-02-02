@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IoT Rasp</title>
+    <%- include('partials/head.html')%>
+</head>
+<body>
+    <h2>IoT para Raspberry</h2>
+    <%- include('partials/navigation.html')  %>
+    <div class="tabla">
+        <table class="table dark">
+            <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Programa</th>
+                <th scope="col">Ejecucion</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <th scope="row">1</th>
+                <td>BlinkLed</td>
+                <td>
+                    <label class="switch">
+                        <input id="on1" type="checkbox">
+                        <span class="slider"></span>
+                        <script>
+                            window.addEventListener("load",function(){
+                                var on= document.getElementById("on1");
+                                on.addEventListener("change", function(){
+                                    if(Number(this.checked)){
+                                        console.log("1");
+                                        $.ajax({
+                                            url: "/run",
+                                            context: document.body
+                                        }).done(function(data) {
+                                            console.log(data);
+                                        });
+                                    }
+                                    else{
+                                        console.log("0");
+                                        $.ajax({
+                                            url: "/end",
+                                            context: document.body
+                                        }).done(function(data) {
+                                            console.log(data);
+                                        });
+                                    }
+                                });
+                            });
+                        </script>
+                    </label>
+                </td>
+                <td>
+                    <button class="button"><a href="https://github.com/JoshuaHernandezAl/RaspberryPi4Programs/blob/main/BLINK/blink.py">Codigo</a></button>
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">2</th>
+                <td>TM1638 LEDandDIS</td>
+                <td>
+                    <label class="switch">
+                        <input id="on2" type="checkbox">
+                        <span class="slider"></span>
+                        <script>
+                            window.addEventListener("load",function(){
+                                var on= document.getElementById("on2");
+                                on.addEventListener("change", function(){
+                                    if(Number(this.checked)){
+                                        $.ajax({
+                                            url: "/tm1638",
+                                            context: document.body
+                                        }).done(function(data) {
+                                            console.log(data);
+                                        });
+                                    }
+                                    else{
+                                        $.ajax({
+                                            url: "/tmOff",
+                                            context: document.body
+                                        }).done(function(data) {
+                                            console.log(data);
+                                        });
+                                    }
+                                });
+                            });
+                        </script>
+                    </label>
+                </td>
+                <td>
+                    <button class="button"><a href="https://github.com/JoshuaHernandezAl/RaspberryPi4Programs/blob/main/TM1638/LEDandDIS.py">Codigo</a></button>
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">3</th>
+                <td>TM1638 Cronometro</td>
+                <td>
+                    <label class="switch">
+                        <input id="on4" type="checkbox">
+                        <span class="slider"></span>
+                        <script>
+                            window.addEventListener("load",function(){
+                                var on= document.getElementById("on4");
+                                on.addEventListener("change", function(){
+                                    if(Number(this.checked)){
+                                        $.ajax({
+                                            url: "/tm1638Cr",
+                                            context: document.body
+                                        }).done(function(data) {
+                                            console.log(data);
+                                        });
+                                    }
+                                    else{
+                                        $.ajax({
+                                            url: "/tmOff",
+                                            context: document.body
+                                        }).done(function(data) {
+                                            console.log(data);
+                                        });
+                                    }
+                                });
+                            });
+                        </script>
+                    </label>
+                </td>
+                <td>
+                    <button class="button"><a href="https://github.com/JoshuaHernandezAl/RaspberryPi4Programs/blob/main/TM1638/cronometro.py">Codigo</a></button>
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">4</th>
+                <td>LCD Reloj</td>
+                <td>
+                    
+                    <label class="switch">
+                        <input id="on3" type="checkbox">
+                        <span class="slider"></span>
+                        <script>
+                            window.addEventListener("load",function(){
+                                var on= document.getElementById("on3");
+                                on.addEventListener("change", function(){
+                                    if(Number(this.checked)){
+                                        console.log("1");
+                                        $.ajax({
+                                            url: "/lcd",
+                                            context: document.body
+                                        }).done(function(data) {
+                                            console.log(data);
+                                        });
+                                    }
+                                    else{
+                                        console.log("0");
+                                        $.ajax({
+                                            url: "/lcdOff",
+                                            context: document.body
+                                        }).done(function(data) {
+                                            console.log(data);
+                                        });
+                                    }
+                                });
+                            });
+                        </script>
+                    </label>
+                </td>
+                <td>
+                    <button class="button"><a href="https://github.com/JoshuaHernandezAl/RaspberryPi4Programs/blob/main/LCD/reloj.py">Codigo</a></button>
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">5</th>
+                <td>LCD OnOff</td>
+                <td>
+                    <label class="switch">
+                        <input id="on6" type="checkbox">
+                        <span class="slider"></span>
+                        <script>
+                            window.addEventListener("load",function(){
+                                var on= document.getElementById("on6");
+                                on.addEventListener("change", function(){
+                                    if(Number(this.checked)){
+                                        $.ajax({
+                                            url: "/lcdOnOff",
+                                            context: document.body
+                                        }).done(function(data) {
+                                            console.log(data);
+                                        });
+                                    }
+                                    else{
+                                        $.ajax({
+                                            url: "/lcdOff",
+                                            context: document.body
+                                        }).done(function(data) {
+                                            console.log(data);
+                                        });
+                                    }
+                                });
+                            });
+                        </script>
+                    </label>
+                </td>
+                <td>
+                    <button class="button"><a href="https://github.com/JoshuaHernandezAl/RaspberryPi4Programs/blob/main/LCD/OnOff.py">Codigo</a></button>
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">6</th>
+                <td>LED RGB</td>
+                <td>
+                    <label class="switch">
+                        <input id="onX" type="checkbox">
+                        <span class="slider"></span>
+                        <script>
+                            window.addEventListener("load",function(){
+                                var on= document.getElementById("onX");
+                                on.addEventListener("change", function(){
+                                    if(Number(this.checked)){
+                                        $.ajax({
+                                            url: "/rgb",
+                                            context: document.body
+                                        }).done(function(data) {
+                                            console.log(data);
+                                        });
+                                    }
+                                    else{
+                                        $.ajax({
+                                            url: "/rgbOff",
+                                            context: document.body
+                                        }).done(function(data) {
+                                            console.log(data);
+                                        });
+                                    }
+                                });
+                            });
+                        </script>
+                    </label>
+                </td>
+                <td>
+                    <button class="button"><a href="https://github.com/JoshuaHernandezAl/RaspberryPi4Programs/blob/main/rgb.py">Codigo</a></button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+      <%- include('partials/footer.html') %>
+</body>
+</html>

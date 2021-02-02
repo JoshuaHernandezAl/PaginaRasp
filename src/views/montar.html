@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Montar paginaRasp</title>
+    <%- include('partials/head.html')%>
+</head>
+<body>
+    <header>
+        <h2>Raspberry Pi 4</h2>
+    </header>
+    <%- include('partials/navigation.html') %>
+    <section class="seccion">
+        <article >
+            <hgroup>
+                <h2>Pagina Rasp en tu raspberry</h2>
+            </hgroup>
+        
+    <p>Aqui veremos mediante los pasos a seguir para montar nuestra pagina en nuestra propia raspberry utilizandola como servidor, para lograr esto necesitaremos tres cosas</p>
+    <ul>
+        <li>Nodejs:con el crearemos nuestro servidor y subiremos la pagina a el, el proyecto lo puedes encontar en github dando <a href="https://github.com/JoshuaHernandezAl/PaginaRasp/tree/main/paginaWebEnServidor">click aqui</a><br></li>
+        <li>Pm2: es un gestor de procesos para nodejs lo utilizaremos para crear un "auto-start" de nuestro servidor, con esto cada vez que iniciemos nuestra raspberry nuestra pagina sera cargada y accesible <br></li>
+        <li>nginx: utilizaremos nginx para cambiar el puerto de acceso de nuestra pagina al puerto que ejeutan los navegadores por defecto (8080) <br></li>
+    </ul>
+    <br>
+    <p>comencemos:</p>
+    <ul>
+        <li>
+            Primeramente necesitaremos actualizar los repositorios de nuestra raspberry para eso ejecutamos el comando "sudo apt update"
+        </li>
+        <li>
+            Paso siguiente ejecutaremos "sudo apt upgrade" lo que actulizara los pacquetes de nuestra raspberry
+        </li>
+        <li>
+            Ahora instalaremos NVM es un programa que nos permite gestionar las versiones de node para eso ejecutaremos el siguiente comando:
+            <br>
+            curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.37.2/install.sh | bash
+        </li>
+        <li>
+            Ahora haremos reset al archivo source con el comando "source ~/bashrc"
+        </li>
+        <li>
+            Siguiente paso, instalar la version mas actual de nodejs con el comando " nvm install node"
+        </li>
+        <li>
+            Ahora cambiaremos de directorio a donde este nuestro proyecto y ejecutaremos el comando "npm i" para instalar las dependencias del proyecto de PaginaRasp
+        </li>
+        <li>
+            Una vez instaladas las dependencias de node con npm ejecutaremos el comando "npm star", y listo tenemos nuestra pagina funcionando en el puerto 3000, para accceder solo tecleamos en el navegador la direccion ip de nuestra raspberry seguida de :3000 (Ej. 192.168.100.40:3000)
+        </li>
+        <li>
+            Empecemos con pm2 para que nuestra pagina siempre este ejecutandose  y no solo cuando ejecutemos el comando "npm start", asi que instalaremos pm2 con el comando "npm install -g pm2"
+        </li>
+        <li>
+            Una vez instalado pm2 comenzaremos a utilizarlo para iniciar nuestro servidor siempre, para eso tendremos que ejecutar el siguite comando "pm2 start src/index.js --name paginaRasp", lo que hace este comando es iniciar nuestra pagina web para logar eso busca en la carpeta src de nuestro proyecto el archivo index.js que es el que tiene todo lo necesario para iniciar nuestro servidor, basicamente hace lo mismo que "npm start" la diferencia es que podemos darle un nombre (el que se quiera en este caso fue paginaRasp)  como identificador.
+        </li>
+        <li>
+            Aun seguimos teniendo el prblema de que cada vez que reiniciemos la raspberry no inicia el servidor,para solucionar eso con pm2 ejecutaremos "pm2 startup systemd" esto lo que hara es crear un comando que nos permitira iniciar el servidor cada vez que prenda la raspberry, asi que solo copiamos y pegamos el comando otorgado por pm2 y damos enter; una vez hecho eso ejecutaremos "pm2 save" esto salvara nuestro comando de inicio para nuestra pagina web
+        </li>
+        <li>
+            Recapitulemos que hemos hecho hasta ahora:
+            <ul>
+                <li>Tenemos nuestra pagina en un servido con nadejs ejecutada por npm en el puerto 3000</li>
+                <li>con pm2 le dimos la orden a la raspberry de que ejecute nuestro servidor cada que se inicie y quie lo haga en el puerto 3000</li>
+            </ul>
+            Ahora nos queda un solo problema por solucionar, que nuestro servidor no ejecute en el puerto 3000, y que de esa forma no tengamos que decirle al navegador que ingrese en ese puerto especifico sino que se le deje a este ingresar en el puerto defecto de aplicaciones web, el 8080. ¿Como hacemos eso? Simple con un proxy y para hacer uso de ese proxy utilizaremos nginx
+        </li>
+        <li>
+            Instalremos nginx con "sudo apt install nginx" , nginx es un administrador de servidores por decirlo de alguna manera, es otro servidor parecido a apache con la diferencia que este es asincrono
+        </li>
+        <li>
+            Procederemos a configurar nginx:
+            <ol>
+                <li>cambiaremos de directorio a cd /etc/nginx/sites-available</li>
+                <li>crearemos un archivo con  "sudo nano" en el cual ingresaremos los siguiente:
+                    <p>
+                        server{
+                            listen 80;
+                            server_name _;
+
+                            location /{
+                                proxy_pass http://localhost:3000;
+                                proxy_http_version 1.1;
+                                proxy_set_header Upgrade $http_upgrade;
+                                proxy_set_header Connection 'upgrade';
+                                proxy_set_header Host $host;
+                                proxy_cache_bypass $http_upgrade;
+                            }
+                        }
+                    </p>
+                </li>
+                <li> para revisr la sintaxis del archivo ejecutamos "sudo nginx -t" si no marca error es que la sintaxis es correcta</li>
+                <li>cambiar de directorio a /etc/nginx/sites-enabled/</li>
+                <li>borramos el archivo por defecto de nginx para que no cause errores, para eso ejecutamos el comando "sudo rm -f default"</li>
+                <li>Haremos una copia por referencia del archivo que creamos anteriormente con "sudo ln -s /etc/nginx/sites-available/paginaRasp /etc/nginx/sites-enabled/paginaRasp"</li>
+                <li>reiniciamos nginx para aplicar los cambios, esto con " sudo systemctl restart nginx"</li>
+                <li>comprobamos el estado de nginx con "sudo systemctl status nginx" si esta activo habremos terminado</li>
+            </ol>
+        </li>
+        <li>Ahora instalaremos un firewall por asuntos de seguridad esto con ufw para poderlo utilizar habremos de instalarlo con "sudo apt install ufw" lo que hara ufw es retringir los conexiones a nuestro servidor si no estan dentro de los protocolos permitidos
+        </li>
+        <li>
+            Añadiremos algunas reglas:
+            <ol>
+                <li>Permitiremos el protocolo ssh para esto con "sudo ufw allow ssh"</li>
+                <li>Habilitaremos el puerto 3000 para los navegadores con "sudo ufw allow 3000"</li>
+                <li>Activaremos el protocolo http de nginx con "sudo ufw 'Nginx HTTP"</li>
+            </ol>
+            Y activamos ufw para nuestro servidor con "sudo ufw enable"
+        </li>
+        <li>
+            Eso es todo con estos pasos tendremos nuestra pagina de raspberry activa utilizando las raspberry como servidor con proxys y con un firewall y que ademas siempre este activo. <br>
+            Puedes dar <a href="https://www.youtube.com/watch?v=hAjltO1uw-A">click aqui</a> si quieres ver un video sobre como hacer todos estos pasos, es cortesia de fatz.
+        </li>
+
+    </ul>
+        </article>
+    </section>
+    <%- include('partials/footer.html') %>
+</body>
+</html>
